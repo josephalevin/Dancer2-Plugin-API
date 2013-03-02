@@ -17,6 +17,7 @@ sub supported_hooks {
 
 sub _build_type {'Resource'}
 
+requires 'validate';
 requires 'process';
 
 # response envelope

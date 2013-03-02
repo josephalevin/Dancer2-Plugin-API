@@ -14,7 +14,6 @@ my $_meta = {};
 #};
 #
 
-
 sub register_resources {
     my ($dsl, %args) = @_;
 
@@ -69,21 +68,13 @@ sub register_resources {
             my ($status, $result) = $r->process(@_);
 
             $dsl->status ($status);
-            # wrap the response in an envelope
-            #           $envelope->{response} = $response;
 
             # collect warnings and errors
                        
-
-            # after resource hook
-            #$resource->after(@_);
-
-            #my $content = $self->process_response ($response);
                             
-            # output the result
-            return $result;
-#            return $envelope;
-#
+            # output the result wrapped in an envelope
+            my $envelope = $dsl->app->execute_hook('plugin.api.envelope', $result) || $result;
+            return $envelope;
         }; 
         
         $dsl->app->add_route(method => $verb,  regexp => $path, code => $handler);
