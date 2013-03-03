@@ -48,10 +48,9 @@ sub register_resources {
         # register the call for the verb and path pattern 
         my $handler = sub {
             my ($context) = @_;
-            #my $resource_cache = $dsl->setting('plugin.api.resource.cache');
           
             # TODO: cache the resource instances 
-            my $r = $resource->new();
+            my $r = $dsl->resource($resource); 
              # validate the input
                           
              # before resource hook

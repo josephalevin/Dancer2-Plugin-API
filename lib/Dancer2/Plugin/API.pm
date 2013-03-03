@@ -22,13 +22,26 @@ register resources_meta => sub {
 };
 
 register resources_cache => sub {
-   
-    my $meta = setting('plugin.api.resources.meta'); 
-    if(!defined $meta){
-        $meta = {};
-        setting('plugin.api.resources.meta' => $meta);
+    my $cache = setting('plugin.api.resources.cache'); 
+    if(!defined $cache){
+        $cache = {};
+        setting('plugin.api.resources.cache' => $cache);
     }
-    return $meta;
+    return $cache;
+};
+
+register resource => sub {
+    my ($dsl, $name) = @_;
+
+    my $resource = resources_cache()->{$name};
+    if (!defined $resource){
+        # TODO verify it's a Moo role resource
+        debug sprintf 'creating: %s', $name;
+        $resource = $name->new(); 
+        resources_cache()->{$name} = $resource;
+    }
+
+    return $resource;
 };
 
 get '/test' => sub {
