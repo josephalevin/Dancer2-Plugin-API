@@ -6,8 +6,11 @@ use warnings;
 #use Dancer2 ':syntax';
 use Dancer2::Plugin;
 use Dancer2::Plugin::API::Handler;
+use Dancer2::Plugin::API::Swagger;
 
 register_hook 'envelope';
+
+register swagger => \&Dancer2::Plugin::API::Swagger::register_swagger_routes;
 
 register register_resources => \&Dancer2::Plugin::API::Handler::register_resources;
 
@@ -42,11 +45,6 @@ register resource => sub {
     }
 
     return $resource;
-};
-
-get '/test' => sub {
-    my ($context) = @_;
-    return resources_meta();
 };
 
 register_plugin for_versions => [2];
