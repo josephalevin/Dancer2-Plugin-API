@@ -4,29 +4,17 @@ use strict;
 use warnings;
 
 use Moo::Role;
-with 'Dancer2::Core::Role::Engine';
 
-sub supported_hooks {
-    qw(
-      plugin.api.resource.validate.before
-      plugin.api.resource.validate.after
-      plugin.api.resource.process.before
-      plugin.api.resource.process.after
-    );
-}
-
-sub _build_type {'Resource'}
-
-requires 'validate';
+i#requires 'validate';
 requires 'process';
 
 # response envelope
 around process => sub {
     my ($orig, $self) = (shift, shift);
 
-    $self->execute_hook('plugin.api.resource.process.before');
+    #   $self->execute_hook('plugin.api.resource.process.before');
     my $result = $self->$orig(@_);
-    $result = $self->execute_hook('plugin.api.resource.process.after', $result);
+    #$result = $self->execute_hook('plugin.api.resource.process.after', $result);
 
     return $result;
 };
