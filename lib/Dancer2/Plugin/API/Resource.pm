@@ -5,7 +5,7 @@ use warnings;
 
 use Moo::Role;
 
-i#requires 'validate';
+#requires 'validate';
 requires 'process';
 
 # response envelope
