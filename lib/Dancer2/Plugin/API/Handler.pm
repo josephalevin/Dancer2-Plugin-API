@@ -19,6 +19,7 @@ my $_meta = {};
 sub register_resources {
     my ($dsl, %args) = @_;
 
+    # TODO: add a Moo role check here to make sure the plugins are resources
     my %options = (
         search_path => $args{search_path},
         require     => 1,
@@ -30,7 +31,7 @@ sub register_resources {
     $dsl->debug ('Beginning service resource initialization.');
 
     for my $resource ($finder->plugins) {
-        my $meta = $resource->_build_meta();
+        my $meta = $resource->_meta();
 
         my $name = $meta->{name};
         $dsl->debug ("Registering '$name' resource.");
@@ -53,8 +54,9 @@ sub register_resources {
         my $handler = sub {
             my ($context) = @_;
             #my $resource_cache = $dsl->setting('plugin.api.resource.cache');
-           
-            my $r = $resource->new(); 
+          
+            # TODO: cache the resource instances 
+            my $r = $resource->new();
              # validate the input
                           
              # before resource hook

@@ -23,9 +23,9 @@ has meta => (
     is      => 'ro',
 #    isa     => HashRef,
     lazy    => 1,
-    builder => 1,
+    builder => '_meta',
 );
 
-requires '_build_meta';
+requires '_meta';
 
 1;
