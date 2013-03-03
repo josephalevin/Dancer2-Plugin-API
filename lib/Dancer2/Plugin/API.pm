@@ -18,6 +18,7 @@ register resources_meta => sub {
    
     my $meta = setting('plugin.api.resources.meta'); 
     if(!defined $meta){
+        debug sprintf 'creating plugin.api.resources.meta';
         $meta = {};
         setting('plugin.api.resources.meta' => $meta);
     }
@@ -27,6 +28,7 @@ register resources_meta => sub {
 register resources_cache => sub {
     my $cache = setting('plugin.api.resources.cache'); 
     if(!defined $cache){
+        debug sprintf 'creating plugin.api.resources.cache';
         $cache = {};
         setting('plugin.api.resources.cache' => $cache);
     }
