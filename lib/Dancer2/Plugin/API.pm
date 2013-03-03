@@ -3,6 +3,7 @@ package Dancer2::Plugin::API;
 use strict;
 use warnings;
 
+#use Dancer2 ':syntax';
 use Dancer2::Plugin;
 use Dancer2::Plugin::API::Handler;
 

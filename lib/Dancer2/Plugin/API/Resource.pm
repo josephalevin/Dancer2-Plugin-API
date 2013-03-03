@@ -9,15 +9,15 @@ use Moo::Role;
 requires 'process';
 
 # response envelope
-around process => sub {
-    my ($orig, $self) = (shift, shift);
+#around process => sub {
+#    my ($orig, $self) = (shift, shift);
 
     #   $self->execute_hook('plugin.api.resource.process.before');
-    my $result = $self->$orig(@_);
+#    my $result = $self->$orig(@_);
     #$result = $self->execute_hook('plugin.api.resource.process.after', $result);
 
-    return $result;
-};
+#    return $result;
+#};
 
 has meta => (
     is      => 'ro',

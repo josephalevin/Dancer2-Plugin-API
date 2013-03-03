@@ -3,14 +3,16 @@ package Dancer2::Plugin::API::Handler;
 use strict;
 use warnings;
 
-use Dancer2::Plugin;
+#use Dancer2 ':syntax';
+#use Dancer2::Plugin;
+
 use Module::Pluggable::Object;
 use Data::Dumper;
 
 my $_meta = {};
 
 #register _register_resources => sub {
-#    my ($self, %args) = plugin_args(@_);
+#    my ($dsl, %args) = plugin_args(@_);
 #};
 #
 
@@ -25,13 +27,13 @@ sub register_resources {
 
     my $finder = Module::Pluggable::Object->new(%options);
 
-    debug 'Beginning service resource initialization.';
+    $dsl->debug ('Beginning service resource initialization.');
 
     for my $resource ($finder->plugins) {
         my $meta = $resource->_build_meta();
 
         my $name = $meta->{name};
-        debug "Registering '$name' resource.";
+        $dsl->debug ("Registering '$name' resource.");
         
         my $verb = lc $meta->{verb};
         my $path = $meta->{path};
@@ -45,19 +47,20 @@ sub register_resources {
         $path =~ s/({([\w_\-\.]+)})/:$2?/g;
 
         my $prefix = $dsl->app->prefix;
-        debug sprintf('%s %s%s => %s', uc $verb, $prefix, $path, $resource );            
+        $dsl->debug (sprintf('%s %s%s => %s', uc $verb, $prefix, $path, $resource )); 
+
         # register the call for the verb and path pattern 
         my $handler = sub {
-          
-           my $resource_cache = $dsl->setting('plugin.api.resource.cache');
+            my ($context) = @_;
+            #my $resource_cache = $dsl->setting('plugin.api.resource.cache');
            
-           my $r = $resource->new(); 
-            # validate the input
+            my $r = $resource->new(); 
+             # validate the input
                           
-            # before resource hook
-            #$resource->before_process(@_);
-#
-            # quit if there were any errors
+             # before resource hook
+             #$resource->before_process(@_);
+# 
+             # quit if there were any errors
 #            f(@{errors()}){
 #                $envelope->{errors} = errors;                
 #                status (400);
@@ -65,15 +68,14 @@ sub register_resources {
 #            }
 
             # call the handler
-            my ($status, $result) = $r->process(@_);
-
+            my ($status, $result) = $r->process($dsl, $context);
             $dsl->status ($status);
 
             # collect warnings and errors
                        
                             
             # output the result wrapped in an envelope
-            my $envelope = $dsl->app->execute_hook('plugin.api.envelope', $result) || $result;
+            my $envelope = $dsl->app->execute_hook('plugin.api.envelope', $dsl, $result) || $result;
             return $envelope;
         }; 
         
@@ -81,9 +83,8 @@ sub register_resources {
         $dsl->app->add_route(method => 'head',  regexp => $path, code => $handler) if $verb =~ /get/i;
     }
            
-    debug 'Finished application resource initialization.';
+    $dsl->debug ('Finished application resource initialization.');
 }
 
-register_plugin for_versions => [2];
 1;
 
