@@ -26,6 +26,7 @@ sub register_resources {
     my $resources_meta = $dsl->resources_meta();
 
     for my $resource ($finder->plugins) {
+        next unless $resource->can('_meta');
         my $meta = $resource->_meta();
 
         my $name = $meta->{name};
