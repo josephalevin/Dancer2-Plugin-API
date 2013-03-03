@@ -11,7 +11,7 @@ sub register_swagger_routes {
     my ($dsl, %options) = @_;
 
     my $api_version = $options{api_version} || 0.0;
-    my $api_prefix = $options{api_prefix} || '/';
+    my $api_prefix = $options{api_prefix} || $dsl->app->prefix();
 
     # make sure the swagger api is json
     $dsl->set (serializer => 'JSON');
