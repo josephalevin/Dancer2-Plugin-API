@@ -9,13 +9,6 @@ use warnings;
 use Module::Pluggable::Object;
 use Data::Dumper;
 
-my $_meta = {};
-
-#register _register_resources => sub {
-#    my ($dsl, %args) = plugin_args(@_);
-#};
-#
-
 sub register_resources {
     my ($dsl, %args) = @_;
 
@@ -30,6 +23,8 @@ sub register_resources {
 
     $dsl->debug ('Beginning service resource initialization.');
 
+    my $resources_meta = $dsl->resources_meta();
+
     for my $resource ($finder->plugins) {
         my $meta = $resource->_meta();
 
@@ -41,8 +36,8 @@ sub register_resources {
 
         # keep track of all the operations under a resource path
         my $resource_name = $1 if $path =~ qr(^\/?(\w+)\/?);
-        $_meta->{$resource_name}->{$path} = [] unless $_meta->{$resource_name}->{$path};
-        push @{$_meta->{$resource_name}->{$path}}, $meta;
+        $resources_meta->{$resource_name}->{$path} = [] unless $resources_meta->{$resource_name}->{$path};
+        push @{$resources_meta->{$resource_name}->{$path}}, $meta;
 
         # convert the path to the dancer route format, changes {param} into :param?
         $path =~ s/({([\w_\-\.]+)})/:$2?/g;
