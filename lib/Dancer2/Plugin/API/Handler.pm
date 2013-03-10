@@ -63,7 +63,6 @@ sub register_resources {
 #                status (400);
 #                return $envelope;
 #            }
-
             # call the handler
             my ($status, $result) = $r->process($dsl, $context);
             $dsl->status ($status);

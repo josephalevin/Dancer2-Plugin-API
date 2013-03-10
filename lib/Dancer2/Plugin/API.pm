@@ -42,8 +42,9 @@ register resource => sub {
     if (!defined $resource){
         # TODO verify it's a Moo role resource
         debug sprintf 'creating: %s', $name;
-        $resource = $name->new(); 
+        $resource = $name->new();
         resources_cache()->{$name} = $resource;
+        debug sprintf 'added %s to the resource cache', $name;
     }
 
     return $resource;
